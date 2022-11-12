@@ -353,18 +353,22 @@ p {
     #poster-preview {
       // width: 638px;
       // width: 100vw;
-      width: 600px;
-      min-width: 600px;
-      max-width: 600px;
-      height: calc(600px * 1334px / 750px);
+      //width: 600px;
+      //min-width: 600px;
+      //max-width: 600px;
+      width: 21cm;
+      height: 29.7cm;
+      padding: 10mm 10mm 10mm 10mm;
+      //height: calc(600px * 1334px / 750px);
       // height: 1067.2px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: stretch;
-      padding: 2.5em;
-      background: url(~assets/bg.png) no-repeat;
-      background-size: contain;
+      //padding: 2.5em;
+//      background: url(~assets/bg.png) no-repeat;
+//      background-size: contain;
+      background-color: white;
       text-align: center;
       box-sizing: border-box;
 
