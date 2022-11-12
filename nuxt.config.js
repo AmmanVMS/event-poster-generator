@@ -10,7 +10,7 @@ export default {
   },
 
   router: {
-    base: process.env.NODE_ENV === 'development' ? '' : '/coscon-poster',
+    base: process.env.NODE_ENV === 'development' ? '' : '/event-poster-generator',
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
