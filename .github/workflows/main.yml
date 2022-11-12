@@ -2,7 +2,7 @@ name: CI & CD
 on:
     push:
         branches:
-            - coscon2021
+            - main
 jobs:
     Build-and-Deploy:
         runs-on: ubuntu-latest
@@ -20,5 +20,7 @@ jobs:
               with:
                   publish_dir: ./docs
                   # cname: ideapp.dev
-                  personal_token: ${{ secrets.GITHUB_TOKEN }}
+                  deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
                   force_orphan: true
+                  user_name: 'github-actions[bot]'
+                  user_email: 'github-actions[bot]@users.noreply.github.com'
