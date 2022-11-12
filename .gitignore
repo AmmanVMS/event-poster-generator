@@ -110,3 +110,4 @@ dist
 # deploy key for github actions
 deploy
 deploy.pub
+install.sh

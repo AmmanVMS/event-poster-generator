@@ -10,21 +10,21 @@
         <h1>Event Poster Generator（Version {{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
-            <el-tab-pane label="论坛信息">
-              <el-form-item id="track" label="论坛名称">
+            <el-tab-pane label="Track&Forum">
+              <el-form-item id="track" label="track">
                 <el-input v-model="forumName" />
               </el-form-item>
-              <!-- <el-form-item label="论坛口号"
+              <!-- <el-form-item label="forumSlogon"
                 ><el-input v-model="forumSlogon"
               /></el-form-item> -->
-              <el-form-item label="论坛详情"
+              <el-form-item label="forumDetail"
                 ><el-input v-model="forumDetail"
               /></el-form-item>
             </el-tab-pane>
 
-            <el-tab-pane label="成员信息">
+            <el-tab-pane label="Image">
               <el-form-item
-                label="成员照片（虽支持自动缩放，建议最好使用类方形照片，以达最好效果）"
+                label="Image Upload成员照片（虽支持自动缩放，建议最好使用类方形照片，以达最好效果）"
               >
                 <el-upload
                   action="#"
@@ -41,35 +41,35 @@
                   <i v-else class="el-icon-plus member-avatar-uploader"></i>
                 </el-upload>
               </el-form-item>
-              <el-form-item label="成员角色"
+              <el-form-item label="memberRole"
                 ><el-input v-model="memberRole"
               /></el-form-item>
-              <el-form-item label="成员姓名">
+              <el-form-item label="memberName">
                 <el-input v-model="memberName" />
               </el-form-item>
             </el-tab-pane>
 
-            <el-tab-pane label="演讲信息">
-              <el-form-item label="演讲标题">
+            <el-tab-pane label="topicTitle">
+              <el-form-item label="topicTitle">
                 <el-input v-model="topicTitle" />
               </el-form-item>
-              <el-form-item label="演讲口号">
+              <el-form-item label="topicSlogon">
                 <el-input v-model="topicSlogon" />
               </el-form-item>
-              <el-form-item label="演讲内容（支持md语法）">
+              <el-form-item label="topicDetail">
                 <el-input v-model="topicDetail" autosize type="textarea" />
               </el-form-item>
             </el-tab-pane>
 
-            <el-tab-pane label="报名信息">
-              <el-form-item label="报名链接（请输入url自动生成报名二维码）"
+            <el-tab-pane label="QR-Code">
+              <el-form-item label="QR-Code"
                 ><el-input v-model="qr"
               /></el-form-item>
             </el-tab-pane>
 
             <el-form-item>
               <el-button type="primary" @click="download()">
-                生成海报
+                Download
               </el-button>
             </el-form-item>
           </el-tabs>
@@ -99,17 +99,19 @@
         </div>
         <div class="footer">
           <img v-if="getQr" :src="getQr" />
-          <small v-if="getQr" >扫描二维码报名参会</small>
+          <small v-if="getQr" >Little Footer Text</small>
         </div>
       </div>
     </div>
     <div class="copy-right">
       <small>
+        <a href="http://github.com/AmmanVMS/event-poster-generator">View the source code.</a>
         <i class="el-icon-service"></i> 本工具由
         <a href="http://github.com/Ovilia">@Ovilia</a> 开发，
         <a href="http://github.com/dz85">@David Z.</a> 重构/修改，
         <a href="http://github.com/mythcsj">@mythcsj</a> 优化，
-        <a href="mailto:geek@lzw.name">问题反馈</a>
+        <a href="mailto:geek@lzw.name">问题反馈</a>,
+        <a href="http://github.com/niccokunzmann">@niccokunzmann</a>
       </small>
     </div>
   </div>
@@ -132,29 +134,28 @@ Vue.use(AsyncComputed)
 export default Vue.extend({
   data() {
     return {
-      forumName: '开源市集',
-      forumSlogon: 'Open Source Bazaar',
-      forumDetail: '2022年3月5日 成都·线上',
+      forumName: 'Amman Valley MakerSpace',
+      forumSlogon: 'Event Title',
+      forumDetail: '1st January 2023, 1200-1500',
       memberAvatarUrl: '',
-      memberRole: '共创者',
-      memberName: '姓名',
-      topicTitle: '这是一个很神秘的主题',
-      topicSlogon: '开源市集邀请您来一起共创',
-      topicDetail: `## 开源市集
-学生科创项目展示、开源软硬件项目展、学生科创项目展、Emotional 交互艺术展、音乐表演和互动、诗社作品展、播客访谈、开放麦克风、开缘树下你和我
+      memberRole: 'memberRole',
+      memberName: 'memberName',
+      topicTitle: 'topicTitle',
+      topicSlogon: 'topicSlogon',
+      topicDetail: `## heading
+- list
+- of
+- something
 
-## 社区活动
-城市聚会、特色活动、开源·真·黑客马拉松、开源市集
-汉服主题、小吃走廊、开源读书会等精彩活动
 `,
-      qr: 'https://www.bagevent.com/event/7685233',
+      qr: 'https://ammanvalley.foss.wales/',
 
-      track: '',
+      track: 'track',
       imageUrl: null as unknown as string,
-      title: '',
-      name: '',
-      topic: '',
-      time: '',
+      title: 'title',
+      name: 'name',
+      topic: 'topic',
+      time: 'time',
       isKeynote: false,
       avatarInput: null,
 
