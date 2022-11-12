@@ -16,6 +16,9 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v2
 
+            - name: set version
+              run: echo "{\"version\":\"`git log -1 --format=%cd --date=short`\"}" > version.json
+
             - name: Use Node.js
               uses: actions/setup-node@v2
               with:

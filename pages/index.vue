@@ -4,10 +4,10 @@
       <div
         v-loading="isDownloading"
         class="poster-control"
-        element-loading-text="生成海报中"
+        element-loading-text="Loading ..."
         element-loading-background="rgba(0, 0, 0, 0.8)"
       >
-        <h1>开源市集 海报生成器（版本：{{ getVersion }}）</h1>
+        <h1>Event Poster Generator（Version {{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
             <el-tab-pane label="论坛信息">
