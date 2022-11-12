@@ -111,3 +111,4 @@ dist
 deploy
 deploy.pub
 install.sh
+*.bak
