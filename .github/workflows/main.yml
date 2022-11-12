@@ -7,7 +7,7 @@ jobs:
     Build-and-Deploy:
         # see https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment
         environment:
-            name: gethub-pages
+            name: github-pages
             url: https://AmmanVMS.github.io/event-poster-generator
         # after using the environment, we need to make the secrets available
         # see https://docs.github.com/en/actions/security-guides/encrypted-secrets#example-using-bash
