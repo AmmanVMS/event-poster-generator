@@ -1,8 +1,12 @@
 # Event Poster Generator
 
-This is a poster generator for ApacheCon Asia 2021. [[Run]](http://zhangwenli.com/acasia-poster/)
+This is a poster generator for the Amman Valley MakerSpace.
+It provides a form to input the name, title and other information for each event so everyone can generate their own poster easily.
 
-It provides a form to input the name, title and other information so that each speaker of the event can generate their own poster easily with auto-completion.
+Useful links:
+
+- **[Generate a poster!](https://AmmanVMS.github.io/event-poster-generator/)**
+- **[Join the discussion](https://ammanvalley.foss.wales/t/poster-generator/111)**
 
 ## Setup
 
