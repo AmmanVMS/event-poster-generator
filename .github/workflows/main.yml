@@ -3,6 +3,11 @@ on:
     push:
         branches:
             - main
+
+env:
+  # see https://stackoverflow.com/questions/69692842/error-message-error0308010cdigital-envelope-routinesunsupported
+  NODE_OPTIONS: --openssl-legacy-provider
+
 jobs:
     Build-and-Deploy:
         # see https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment
