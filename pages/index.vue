@@ -10,98 +10,53 @@
         <h1>Event Poster Generator（Version {{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
-            <el-tab-pane label="Track&Forum">
-              <el-form-item id="track" label="track">
-                <el-input v-model="forumName" />
+            <el-tab-pane label="Event Details">
+              <el-form-item label="Event Times">
+                <el-input v-model="eventTimes" autosize type="textarea" />
               </el-form-item>
-              <!-- <el-form-item label="forumSlogon"
-                ><el-input v-model="forumSlogon"
-              /></el-form-item> -->
-              <el-form-item label="forumDetail"
-                ><el-input v-model="forumDetail"
-              /></el-form-item>
-            </el-tab-pane>
-
-            <el-tab-pane label="Image">
               <el-form-item
-                label="Image Upload成员照片（虽支持自动缩放，建议最好使用类方形照片，以达最好效果）"
-              >
+                label="Image Upload">
                 <el-upload
                   action="#"
                   :show-file-list="false"
-                  :on-change="updateAvatar"
+                  :on-change="updateFeatureImage"
                   :auto-upload="false"
-                  accept="image/*"
-                >
+                  accept="image/*" >
                   <img
-                    v-if="memberAvatarUrl"
-                    :src="memberAvatarUrl"
+                    v-if="featureImageUrl"
+                    :src="featureImageUrl"
                     class="member-avatar-uploader"
                   />
                   <i v-else class="el-icon-plus member-avatar-uploader"></i>
                 </el-upload>
               </el-form-item>
-              <el-form-item label="memberRole"
-                ><el-input v-model="memberRole"
-              /></el-form-item>
-              <el-form-item label="memberName">
-                <el-input v-model="memberName" />
+              <el-form-item label="QR-Code & Link">
+                <el-input v-model="qr" />
               </el-form-item>
-            </el-tab-pane>
-
-            <el-tab-pane label="topicTitle">
-              <el-form-item label="topicTitle">
-                <el-input v-model="topicTitle" />
-              </el-form-item>
-              <el-form-item label="topicSlogon">
-                <el-input v-model="topicSlogon" />
-              </el-form-item>
-              <el-form-item label="topicDetail">
-                <el-input v-model="topicDetail" autosize type="textarea" />
-              </el-form-item>
-            </el-tab-pane>
-
-            <el-tab-pane label="QR-Code">
-              <el-form-item label="QR-Code"
-                ><el-input v-model="qr"
-              /></el-form-item>
             </el-tab-pane>
 
             <el-form-item>
               <el-button type="primary" @click="download()">
-                Download
+                Download Image
               </el-button>
             </el-form-item>
           </el-tabs>
         </el-form>
       </div>
       <div id="poster-preview">
-        <div class="header">
-          <div class="forum-banner">
-            <h1 class="forum-name">{{ forumName }}</h1>
-            <h2 class="forum-slogon">{{ forumSlogon }}</h2>
-            <small class="forum-detail">{{ forumDetail }}</small>
+        <div class="top">
+          <div class="image">
+            <img
+              v-if="featureImageUrl"
+              class="picture"
+              :src="featureImageUrl"
+            />
           </div>
-          <div class="logo"></div>
+          <div class="details">
+            <div class="event-times" v-html="getEventTimesMd"></div>
+          </div>
         </div>
-        <div class="content">
-          <img
-            v-if="memberAvatarUrl"
-            class="member-avatar"
-            :src="memberAvatarUrl"
-          />
-          <div v-else class="member-avatar"></div>
-          <h2 class="member-role">{{ memberRole }}</h2>
-          <h1 class="member-name">{{ memberName }}</h1>
-          <h2 class="topic-title">{{ topicTitle }}</h2>
-          <h2 class="topic-slogon">{{ topicSlogon }}</h2>
-          <div class="topic-detail" v-html="getMd"></div>
-        </div>
-        <div class="footer">
-          <img v-if="getQr" :src="getQr" />
-          <small v-if="getQr" >Little Footer Text</small>
-        </div>
-      </div>
+      </div> <!-- /poster-preview -->
     </div>
     <div class="copy-right">
       <small>
@@ -134,15 +89,9 @@ Vue.use(AsyncComputed)
 export default Vue.extend({
   data() {
     return {
-      forumName: 'Amman Valley MakerSpace',
-      forumSlogon: 'Event Title',
-      forumDetail: '1st January 2023, 1200-1500',
-      memberAvatarUrl: '',
-      memberRole: 'memberRole',
-      memberName: 'memberName',
-      topicTitle: 'topicTitle',
-      topicSlogon: 'topicSlogon',
-      topicDetail: `## heading
+      eventTimes: "",
+      featureImageUrl: "",
+      eventDescription: `## heading
 - list
 - of
 - something
@@ -152,36 +101,8 @@ export default Vue.extend({
 
       track: 'track',
       imageUrl: null as unknown as string,
-      title: 'title',
-      name: 'name',
-      topic: 'topic',
-      time: 'time',
-      isKeynote: false,
-      avatarInput: null,
-
-      nameFontSize: 1,
-      topicFontSize: 1,
-
-      avatarDefaultPos: {
-        width: 0,
-        height: 0,
-        top: 0,
-        left: 0,
-      },
-      avatarPos: {
-        width: 0,
-        height: 0,
-        top: 0,
-        left: 0,
-      },
-      avatarZoom: 1,
-      isMouseDown: false,
-      mouseX: 0,
-      mouseY: 0,
       isDownloading: false,
       posterBase64: '',
-
-      lang: 'zh',
     }
   },
 
@@ -190,10 +111,11 @@ export default Vue.extend({
       return v.version
     },
 
-    getMd(): string {
+    getEventTimesMd(): string {
       const md = new MarkdownIt()
-      return md.render(this.topicDetail)
+      return md.render(this.eventTimes)
     },
+
   },
 
   asyncComputed: {
@@ -208,17 +130,17 @@ export default Vue.extend({
   mounted() {},
 
   methods: {
-    updateAvatar(file: ElUploadInternalFileDetail) {
+    updateFeatureImage(file: ElUploadInternalFileDetail) {
       if (!file) return
 
-      if (this.memberAvatarUrl !== '') URL.revokeObjectURL(this.memberAvatarUrl)
+      if (this.featureImageUrl !== '') URL.revokeObjectURL(this.featureImageUrl)
 
-      this.memberAvatarUrl = URL.createObjectURL(file.raw)
+      this.featureImageUrl = URL.createObjectURL(file.raw)
     },
 
     async download() {
 
-      if(!this.memberAvatarUrl){
+      if(!this.featureImageUrl){
         alert('请上传头像');
         return;
       }
@@ -351,25 +273,14 @@ p {
     }
 
     #poster-preview {
-      // width: 638px;
-      // width: 100vw;
-      //width: 600px;
-      //min-width: 600px;
-      //max-width: 600px;
       width: 21cm;
       height: 29.7cm;
       padding: 10mm 10mm 10mm 10mm;
-      //height: calc(600px * 1334px / 750px);
-      // height: 1067.2px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: stretch;
-      //padding: 2.5em;
-//      background: url(~assets/bg.png) no-repeat;
-//      background-size: contain;
       background-color: white;
-      text-align: center;
       box-sizing: border-box;
 
       .header,
