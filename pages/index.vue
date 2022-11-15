@@ -33,6 +33,9 @@
               <el-form-item label="QR-Code & Link">
                 <el-input v-model="qr" />
               </el-form-item>
+              <el-form-item label="Event Description">
+                <el-input v-model="eventDescription" autosize type="textarea" />
+              </el-form-item>
             </el-tab-pane>
 
             <el-form-item>
@@ -45,15 +48,24 @@
       </div>
       <div id="poster-preview">
         <div class="top">
-          <div class="image">
-            <img
-              v-if="featureImageUrl"
-              class="picture"
-              :src="featureImageUrl"
-            />
-          </div>
+          <img
+            v-if="featureImageUrl"
+            class="feature-image"
+            :src="featureImageUrl"
+          />
           <div class="details">
             <div class="event-times" v-html="getEventTimesMd"></div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="event-description" v-html="getEventDescriptionMd"></div>
+          <div class="logos">
+            <div class="image" id="ammanvms"></div>
+            <div class="image" id="council"></div>
+            <div class="image" id="qr-code" v-bind:style="{ backgroundImage: 'url(' + getQr + ')'}"></div>
+<!--            <img src="~assets/logo-square.svg"/>
+            <img src="~assets/logo-square.svg"/>
+            <img id="qr-code" v-bind:src="getQr"/>-->
           </div>
         </div>
       </div> <!-- /poster-preview -->
@@ -90,11 +102,15 @@ export default Vue.extend({
   data() {
     return {
       eventTimes: "",
+      eventDescription: "",
       featureImageUrl: "",
-      eventDescription: `## heading
-- list
-- of
-- something
+      eventDescription: `# Event Name
+
+This is a short text of what we are doing.
+
+Please bring:
+- this
+- and that
 
 `,
       qr: 'https://ammanvalley.foss.wales/',
@@ -114,6 +130,11 @@ export default Vue.extend({
     getEventTimesMd(): string {
       const md = new MarkdownIt()
       return md.render(this.eventTimes)
+    },
+
+    getEventDescriptionMd(): string {
+      const md = new MarkdownIt()
+      return md.render(this.eventDescription)
     },
 
   },
@@ -236,11 +257,18 @@ p {
   text-justify: inter-ideograph;
 }
 
+@mixin debug-borders {
+  border-style: dashed;
+  border-color: black;
+  border-width: 1px;
+}
+
 .root {
   min-width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #dddddd;
 
   .poster-container {
     font-family: 'Open Sans';
@@ -282,6 +310,63 @@ p {
       align-items: stretch;
       background-color: white;
       box-sizing: border-box;
+      .top {
+        flex-grow: 2;
+        display: inline-flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        align-items: stretch;
+        @include debug-borders();          
+        
+        .feature-image {
+          flex-grow: 2;
+          height: 100%;
+          width: 0%;
+          background: #dddddd;
+          object-fit: cover;
+//          display: inline-block;
+        }
+        .details {
+          @include debug-borders();   
+          border-bottom-width: 1px;
+          display: inline-block;
+          flex-grow: 1;
+        }
+      }
+      .bottom {
+        flex-grow: 1;
+        display: inline-flex;
+        flex-direction: row;
+        
+        .event-description {
+          @include debug-borders();
+          flex-grow: 3;
+          
+        }
+        .logos {
+          flex-grow: 1;
+          flex-direction: column;
+          display: inline-flex;
+          justify-content: space-between;
+          position: relative;
+          
+          .image {
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position-y: center;
+            background-position-x: center;
+            flex-grow: 1;
+          }
+          
+          #ammanvms {
+            background-image: url(~assets/logo-square.svg);
+          }
+          #council {
+            background-image: url(~assets/logo-square.svg);
+          }
+        }
+      }
 
       .header,
       .footer {
@@ -355,39 +440,8 @@ p {
         justify-content: center;
         align-items: center;
         text-align: center;
-
-        .member-avatar-mask,
-        .member-avatar {
-          font-size: 1em;
-          width: 150px;
-          height: 150px;
-          // max-width: 128px;
-          border: 0.3em solid #151617;
-          border-radius: 50%;
-          background: #B6E0B9;
-          object-fit: cover;
-
-          // &:after {
-          //   font-size: 1em;
-          //   content: '';
-          //   display: block;
-          //   padding-top: 100%;
-          // }
-        }
-
-        .topic-slogon {
-          width: 100%;
-          color: white;
-          background: black;
-        }
-
-        .topic-detail {
-          font-size: 1em;
-          width: 100%;
-          text-align: left;
-        }
       }
-    }
+    } /* end of poster preview */
   }
 
   .copy-right {
