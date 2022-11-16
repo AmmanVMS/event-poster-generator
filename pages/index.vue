@@ -406,7 +406,7 @@ p {
             background-image: url(~assets/logo-square.svg);
           }
           #council {
-            background-image: url(~assets/logo-square.svg);
+            background-image: url(~assets/logo-cwmaman-500x500.png);
           }
         }
       }
