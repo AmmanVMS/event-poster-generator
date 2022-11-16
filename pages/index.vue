@@ -50,8 +50,11 @@
             </el-tab-pane>
 
             <el-form-item>
-              <el-button type="primary" @click="download()">
+              <el-button type="primary" @click="downloadImage()">
                 Download Image
+              </el-button>
+              <el-button type="primary" @click="downloadPDF()">
+                Download PDF (print)
               </el-button>
             </el-form-item>
           </el-tabs>
@@ -101,6 +104,7 @@
 import Vue from 'vue'
 import AsyncComputed from 'vue-async-computed'
 import domtoimage from 'retina-dom-to-image'
+import domToPDF from 'dom-to-pdf'
 import qrcode from 'qrcode'
 import MarkdownIt from 'markdown-it'
 import moment from 'moment'
@@ -193,15 +197,10 @@ Please bring:
       this.featureImageUrl = URL.createObjectURL(file.raw)
     },
 
-    async download() {
+    async downloadImage() {
 
       if(!this.featureImageUrl){
         alert('Please add an image to the poster!');
-        return;
-      }
-
-      if(this.eventTitle == ''){
-        alert('Please add en event title!');
         return;
       }
 
@@ -219,6 +218,39 @@ Please bring:
        *    相关： https://html.spec.whatwg.org/multipage/links.html#downloading-resources
        */
       downloadLink.download = `${this.eventTitle}.jpg`
+      downloadLink.click()
+      this.isDownloading = false
+    },
+    
+    async downloadPDF() {
+
+      if(!this.featureImageUrl){
+        alert('Please add an image to the poster!');
+        return;
+      }
+
+      this.isDownloading = true
+      const url = await domToPDF(
+        document.getElementById('poster-preview'),
+        {
+          filename: `${this.eventTitle}.pdf`
+        },
+      )
+      if (!url) {
+        alert("There was an error while generating the PDF.");
+        this.isDownloading = false
+        return;
+      }
+
+      const downloadLink = document.createElement('a')
+      downloadLink.href = url
+      /**
+       * chromium bug:
+       *    detail: https://bugs.chromium.org/p/chromium/issues/detail?id=375634
+       *    status: WontFix
+       *    相关： https://html.spec.whatwg.org/multipage/links.html#downloading-resources
+       */
+      downloadLink.download = `${this.eventTitle}.pdf`
       downloadLink.click()
       this.isDownloading = false
     },
