@@ -11,7 +11,10 @@
         <el-form>
           <el-tabs>
             <el-tab-pane label="Event Details">
-              <el-form-item label="Event Times">
+              <el-form-item label="Event Title">
+                <el-input v-model="eventTitle" autosize type="text" />
+              </el-form-item>
+              <el-form-item label="Event Times (Markdown)">
                 <el-input v-model="eventTimes" autosize type="textarea" />
               </el-form-item>
               <el-form-item
@@ -25,16 +28,24 @@
                   <img
                     v-if="featureImageUrl"
                     :src="featureImageUrl"
-                    class="member-avatar-uploader"
+                    class="feature-image-uploader"
                   />
-                  <i v-else class="el-icon-plus member-avatar-uploader"></i>
+                  <i v-else class="el-icon-plus feature-image-uploader"></i>
                 </el-upload>
+              </el-form-item>
+              <el-form-item label="Event Description (Markdown)">
+                <el-input v-model="eventDescription" autosize type="textarea" />
+              </el-form-item>
+            </el-tab-pane>
+            <el-tab-pane label="Contact and Location">
+              <el-form-item label="Event Contact Information (Markdown)">
+                <el-input v-model="eventContact" autosize type="textarea" />
               </el-form-item>
               <el-form-item label="QR-Code & Link">
                 <el-input v-model="qr" />
               </el-form-item>
-              <el-form-item label="Event Description">
-                <el-input v-model="eventDescription" autosize type="textarea" />
+              <el-form-item label="Event Location (Markdown)">
+                <el-input v-model="eventLocation" autosize type="textarea" />
               </el-form-item>
             </el-tab-pane>
 
@@ -48,17 +59,19 @@
       </div>
       <div id="poster-preview">
         <div class="top">
-          <img
-            v-if="featureImageUrl"
-            class="feature-image"
-            :src="featureImageUrl"
-          />
+          <div class="feature-image"
+            v-bind:style="{ backgroundImage: 'url(' + featureImageUrl + ')'}" />
           <div class="details">
+            <div class="event-location" v-html="getEventLocationMd"></div>
+            <div class="event-contact" v-html="getEventContactMd"></div>
             <div class="event-times" v-html="getEventTimesMd"></div>
           </div>
         </div>
         <div class="bottom">
-          <div class="event-description" v-html="getEventDescriptionMd"></div>
+          <div class="event-description">
+            <h1>{{ eventTitle }}</h1>
+            <div class="description" v-html="getEventDescriptionMd"></div>
+          </div>
           <div class="logos">
             <div class="image" id="ammanvms"></div>
             <div class="image" id="council"></div>
@@ -90,6 +103,7 @@ import AsyncComputed from 'vue-async-computed'
 import domtoimage from 'retina-dom-to-image'
 import qrcode from 'qrcode'
 import MarkdownIt from 'markdown-it'
+import moment from 'moment'
 
 import { ElUploadInternalFileDetail } from 'element-ui/types/upload'
 import v from '../version.json'
@@ -98,21 +112,33 @@ const URL = window.URL || window.webkitURL
 
 Vue.use(AsyncComputed)
 
+const inTheFuture = new Date();
+inTheFuture.setDate(inTheFuture.getDate() + 14);
+
 export default Vue.extend({
   data() {
     return {
-      eventTimes: "",
-      eventDescription: "",
+      eventTitle: "MakerSpace Event",
+      eventLocation: `Amman Valley  
+MakerSpace,  
+Glanaman,  
+Station Road,  
+SA18 1LQ`,
+      eventTimes: moment().add(14, 'days').format('Do MMM YY, h:00 a'),
+      eventContact: `me@email.address  
++44 phone number`,
       featureImageUrl: "",
-      eventDescription: `# Event Name
+      eventDescription: `First: the purpose of the event and what happens
 
-This is a short text of what we are doing.
+who it is for (target audience)
+
+which skills/material to bring
+
+which skills to learn
 
 Please bring:
 - this
-- and that
-
-`,
+- and that`,
       qr: 'https://ammanvalley.foss.wales/',
 
       track: 'track',
@@ -131,7 +157,15 @@ Please bring:
       const md = new MarkdownIt()
       return md.render(this.eventTimes)
     },
+    getEventContactMd(): string {
+      const md = new MarkdownIt()
+      return md.render(this.eventContact)
+    },
 
+    getEventLocationMd(): string {
+      const md = new MarkdownIt()
+      return md.render(this.eventLocation)
+    },
     getEventDescriptionMd(): string {
       const md = new MarkdownIt()
       return md.render(this.eventDescription)
@@ -162,12 +196,12 @@ Please bring:
     async download() {
 
       if(!this.featureImageUrl){
-        alert('请上传头像');
+        alert('Please add an image to the poster!');
         return;
       }
 
-      if(this.memberName == '姓名'){
-        alert('请填写姓名');
+      if(this.eventTitle == ''){
+        alert('Please add en event title!');
         return;
       }
 
@@ -184,7 +218,7 @@ Please bring:
        *    status: WontFix
        *    相关： https://html.spec.whatwg.org/multipage/links.html#downloading-resources
        */
-      downloadLink.download = `${this.memberName}.jpg`
+      downloadLink.download = `${this.eventTitle}.jpg`
       downloadLink.click()
       this.isDownloading = false
     },
@@ -248,7 +282,7 @@ p {
   margin-block-end: 1.5em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
-  font-size: 0.8em;
+  font-size: 1em;
 }
 
 @mixin justify {
@@ -260,7 +294,7 @@ p {
 @mixin debug-borders {
   border-style: dashed;
   border-color: black;
-  border-width: 1px;
+  border-width: 0px;
 }
 
 .root {
@@ -286,7 +320,7 @@ p {
         align-items: center;
         border: 1px dashed #888;
         border-radius: 6px;
-        .member-avatar-uploader {
+        .feature-image-uploader {
           width: 32px;
           height: 32px;
           display: flex;
@@ -321,28 +355,35 @@ p {
         
         .feature-image {
           flex-grow: 2;
-          height: 100%;
-          width: 0%;
           background: #dddddd;
-          object-fit: cover;
-//          display: inline-block;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position-y: center;
+          background-position-x: center;
+          border-radius: 1em;
         }
         .details {
-          @include debug-borders();   
-          border-bottom-width: 1px;
+          @include debug-borders();
           display: inline-block;
-          flex-grow: 1;
+//          flex-grow: 1;
+          padding-left: 1em;
+          justify-content: flex-end;
+          display: flex;
+          flex-direction: column;
         }
       }
       .bottom {
-        flex-grow: 1;
         display: inline-flex;
         flex-direction: row;
         
         .event-description {
           @include debug-borders();
           flex-grow: 3;
-          
+        
+          h1 {
+            text-align: center;
+            padding: 0.3em;
+          }
         }
         .logos {
           flex-grow: 1;
@@ -350,6 +391,8 @@ p {
           display: inline-flex;
           justify-content: space-between;
           position: relative;
+          min-width: 8em;
+          margin: 0.5em;
           
           .image {
             background-size: contain;

@@ -15,6 +15,7 @@
     "core-js": "^3.26.0",
     "element-ui": "^2.15.10",
     "markdown-it": "^13.0.1",
+    "moment": "^2.29.4",
     "nuxt": "^2.13.3",
     "qrcode": "^1.5.1",
     "retina-dom-to-image": "^2.5.6",
