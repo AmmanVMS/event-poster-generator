@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "core-js": "^3.26.0",
-    "dom-to-pdf": "^0.3.1",
     "element-ui": "^2.15.10",
+    "jspdf": "^2.5.1",
     "markdown-it": "^13.0.1",
     "moment": "^2.29.4",
     "nuxt": "^2.13.3",

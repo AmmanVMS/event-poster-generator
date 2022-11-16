@@ -104,10 +104,10 @@
 import Vue from 'vue'
 import AsyncComputed from 'vue-async-computed'
 import domtoimage from 'retina-dom-to-image'
-import domToPDF from 'dom-to-pdf'
 import qrcode from 'qrcode'
 import MarkdownIt from 'markdown-it'
 import moment from 'moment'
+import { jsPDF } from "jspdf";
 
 import { ElUploadInternalFileDetail } from 'element-ui/types/upload'
 import v from '../version.json'
@@ -230,28 +230,12 @@ Please bring:
       }
 
       this.isDownloading = true
-      const url = await domToPDF(
-        document.getElementById('poster-preview'),
-        {
-          filename: `${this.eventTitle}.pdf`
-        },
+      const url = await domtoimage.toJpeg(
+        document.getElementById('poster-preview')
       )
-      if (!url) {
-        alert("There was an error while generating the PDF.");
-        this.isDownloading = false
-        return;
-      }
-
-      const downloadLink = document.createElement('a')
-      downloadLink.href = url
-      /**
-       * chromium bug:
-       *    detail: https://bugs.chromium.org/p/chromium/issues/detail?id=375634
-       *    status: WontFix
-       *    相关： https://html.spec.whatwg.org/multipage/links.html#downloading-resources
-       */
-      downloadLink.download = `${this.eventTitle}.pdf`
-      downloadLink.click()
+      const doc = new jsPDF(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html
+      doc.addImage(url, 0, 0, 210, 297); // http://raw.githack.com/MrRio/jsPDF/master/docs/module-addImage.html#~addImage
+      doc.save(`${this.eventTitle}.pdf`);
       this.isDownloading = false
     },
   },
