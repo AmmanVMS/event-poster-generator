@@ -10,12 +10,9 @@
         <h1>Event Poster Generator（Version {{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
-            <el-tab-pane label="Event Details">
+            <el-tab-pane label="Event Outline">
               <el-form-item label="Event Title">
                 <el-input v-model="eventTitle" autosize type="text" />
-              </el-form-item>
-              <el-form-item label="Event Times (Markdown)">
-                <el-input v-model="eventTimes" autosize type="textarea" />
               </el-form-item>
               <el-form-item
                 label="Image Upload">
@@ -35,6 +32,14 @@
               </el-form-item>
               <el-form-item label="Event Description (Markdown)">
                 <el-input v-model="eventDescription" autosize type="textarea" />
+              </el-form-item>
+            </el-tab-pane>
+            <el-tab-pane label="Event Details">
+              <el-form-item label="Event Times (Markdown)">
+                <el-input v-model="eventTimes" autosize type="textarea" />
+              </el-form-item>
+              <el-form-item label="Event Costs - fixed prize, donation (Markdown)">
+                <el-input v-model="eventCost" autosize type="textarea" />
               </el-form-item>
             </el-tab-pane>
             <el-tab-pane label="Contact and Location">
@@ -68,6 +73,7 @@
             <div class="event-location" v-html="getEventLocationMd"></div>
             <div class="event-contact" v-html="getEventContactMd"></div>
             <div class="event-times" v-html="getEventTimesMd"></div>
+            <div class="event-cost" v-html="getEventCostMd"></div>
           </div>
         </div>
         <div class="bottom">
@@ -129,6 +135,8 @@ Glanaman,
 Station Road,  
 SA18 1LQ`,
       eventTimes: moment().add(14, 'days').format('Do MMM YY, h:00 a'),
+      eventCost: `Cost: Pay what you  
+can to support us.`,
       eventContact: `My Name
 
 ammanvms@outlook.com
@@ -167,6 +175,10 @@ Please bring:
     getEventContactMd(): string {
       const md = new MarkdownIt()
       return md.render(this.eventContact)
+    },
+    getEventCostMd(): string {
+      const md = new MarkdownIt()
+      return md.render(this.eventCost)
     },
 
     getEventLocationMd(): string {
