@@ -21,7 +21,7 @@
                 <input type="radio" value="4" id="layout-4" v-model="layout" class="choice">
                 <label for="layout-4"><img src="~assets/layout-4.svg" v-bind:class="{ selected: layout4selected }"/></label>
               </el-form-item>
-              <el-form-item label="Image 1 Upload">
+              <el-form-item label="Image ↖ Upload">
                 <el-upload
                   action="#"
                   :show-file-list="false"
@@ -36,7 +36,7 @@
                   <i v-else class="el-icon-plus feature-image-uploader"></i>
                 </el-upload>
               </el-form-item>
-              <el-form-item label="Image 3 Upload" v-show="layout4selected || layout3selected">
+              <el-form-item label="Image ↗ Upload" v-show="layout4selected || layout3selected">
                 <el-upload
                   action="#"
                   :show-file-list="false"
@@ -51,7 +51,7 @@
                   <i v-else class="el-icon-plus feature-image-uploader"></i>
                 </el-upload>
               </el-form-item>
-              <el-form-item label="Image 2 Upload" v-show="layout4selected || layout3selected || layout2selected">
+              <el-form-item label="Image ↙ Upload" v-show="layout4selected || layout3selected || layout2selected">
                 <el-upload
                   action="#"
                   :show-file-list="false"
@@ -66,7 +66,7 @@
                   <i v-else class="el-icon-plus feature-image-uploader"></i>
                 </el-upload>
               </el-form-item>
-              <el-form-item label="Image 4 Upload" v-show="layout4selected">
+              <el-form-item label="Image ↘ Upload" v-show="layout4selected">
                 <el-upload
                   action="#"
                   :show-file-list="false"
