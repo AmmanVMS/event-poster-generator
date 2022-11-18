@@ -86,10 +86,7 @@
           <div class="logos">
             <div class="image" id="ammanvms"></div>
             <div class="image" id="council"></div>
-            <div class="image" id="qr-code" v-bind:style="{ backgroundImage: 'url(' + getQr + ')'}"></div>
-<!--            <img src="~assets/logo-square.svg"/>
-            <img src="~assets/logo-square.svg"/>
-            <img id="qr-code" v-bind:src="getQr"/>-->
+            <div class="image" id="qr-code" v-show="qr" v-bind:style="{ backgroundImage: 'url(' + getQr + ')'}"></div>
           </div>
         </div>
       </div> <!-- /poster-preview -->
@@ -158,7 +155,6 @@ Please bring:
 - and that`,
       qr: 'https://ammanvalley.foss.wales/',
 
-      track: 'track',
       imageUrl: null as unknown as string,
       isDownloading: false,
       posterBase64: '',
