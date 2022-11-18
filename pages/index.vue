@@ -66,28 +66,28 @@
         </el-form>
       </div>
       <div id="poster-preview">
-        <div class="top">
+        <div class="left">
           <div class="feature-image"
             v-bind:style="{ backgroundImage: 'url(' + featureImageUrl + ')'}">
             <span class="upload" v-if="!featureImageUrl">⇧</span>
           </div>
-          <div class="details">
-            <div class="event-location" v-html="getEventLocationMd"></div>
-            <div class="event-contact" v-html="getEventContactMd"></div>
-            <div class="event-times" v-html="getEventTimesMd"></div>
-            <div class="event-cost" v-html="getEventCostMd"></div>
-          </div>
-        </div>
-        <div class="bottom">
           <div class="event-description">
             <h1>{{ eventTitle }}</h1>
             <div class="description" v-html="getEventDescriptionMd"></div>
           </div>
-          <div class="logos">
-            <div class="image" id="ammanvms"></div>
-            <div class="image" id="council"></div>
-            <div class="image" id="qr-code" v-show="qr" v-bind:style="{ backgroundImage: 'url(' + getQr + ')'}"></div>
-          </div>
+        </div>
+        <div class="right">
+<!--          <div class="logos"> -->
+            <div class="logo" id="ammanvms"></div>
+            <div class="logo" id="council"></div>
+            <div class="logo" id="qr-code" v-show="qr" v-bind:style="{ backgroundImage: 'url(' + getQr + ')'}"></div>
+<!--          </div>
+          <div class="details"> -->
+            <div class="detail event-location" v-html="getEventLocationMd"></div>
+            <div class="detail event-contact" v-html="getEventContactMd"></div>
+            <div class="detail event-times" v-html="getEventTimesMd"></div>
+            <div class="detail event-cost" v-html="getEventCostMd"></div>
+        <!--  </div> -->
         </div>
       </div> <!-- /poster-preview -->
     </div>
@@ -368,16 +368,16 @@ p {
       height: 29.7cm;
       padding: 10mm 10mm 10mm 10mm;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       justify-content: space-between;
       align-items: stretch;
       background-color: white;
       box-sizing: border-box;
-      .top {
+      .left {
         flex-grow: 2;
         display: inline-flex;
-        flex-direction: row;
-        width: 100%;
+        flex-direction: column;
+        height: 100%;
         justify-content: space-between;
         align-items: stretch;
         @include debug-borders();          
@@ -401,29 +401,32 @@ p {
             font-weight: bold;
           }
         }
-        .details {
-          @include debug-borders();
-          display: inline-block;
-//          flex-grow: 1;
-          padding-left: 1em;
-          justify-content: flex-end;
-          display: flex;
-          flex-direction: column;
-        }
-      }
-      .bottom {
-        display: inline-flex;
-        flex-direction: row;
-        
+
         .event-description {
           @include debug-borders();
-          flex-grow: 3;
         
           h1 {
             padding-top: 0.3em;
             padding-bottom: 0.3em;
           }
         }
+      }
+      .right {
+        display: inline-flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        padding-left: 1em;
+
+        .details {
+          @include debug-borders();
+//          display: inline-block;
+          flex-grow: 1;
+          justify-content: flex-end;
+          display: flex;
+          flex-direction: column;
+        }
+
         .logos {
           flex-grow: 1;
           flex-direction: column;
@@ -432,22 +435,23 @@ p {
           position: relative;
           min-width: 8em;
           margin: 0.5em;
-          
-          .image {
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position-y: center;
-            background-position-x: center;
-            flex-grow: 1;
-          }
-          
-          #ammanvms {
-            background-image: url(~assets/logo-square.svg);
-          }
-          #council {
-            background-image: url(~assets/logo-cwmaman-500x500.png);
-          }
         }
+          
+        .logo {
+          background-size: contain;
+          background-repeat: no-repeat;
+          background-position-y: center;
+          background-position-x: center;
+          flex-grow: 1;
+        }
+        
+        #ammanvms {
+          background-image: url(~assets/logo-square.svg);
+        }
+        #council {
+          background-image: url(~assets/logo-cwmaman-500x500.png);
+        }
+      
       }
 
       .header,
