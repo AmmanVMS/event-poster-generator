@@ -129,7 +129,10 @@ Glanaman,
 Station Road,  
 SA18 1LQ`,
       eventTimes: moment().add(14, 'days').format('Do MMM YY, h:00 a'),
-      eventContact: `me@email.address  
+      eventContact: `My Name
+
+ammanvms@outlook.com
+
 +44 phone number`,
       featureImageUrl: "",
       eventDescription: `First: the purpose of the event and what happens
