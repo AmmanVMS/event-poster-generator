@@ -397,8 +397,8 @@ p {
           flex-grow: 3;
         
           h1 {
-            text-align: center;
-            padding: 0.3em;
+            padding-top: 0.3em;
+            padding-bottom: 0.3em;
           }
         }
         .logos {
