@@ -10,31 +10,87 @@
         <h1>Event Poster Generator（Version {{ getVersion }}）</h1>
         <el-form>
           <el-tabs>
-            <el-tab-pane label="Event Outline">
-              <el-form-item label="Event Title">
-                <el-input v-model="eventTitle" autosize type="text" />
+            <el-tab-pane label="Images">
+              <el-form-item label="Layout" class="layout">
+                <input type="radio" value="1" id="layout-1" v-model="layout" class="choice">
+                <label for="layout-1"><img src="~assets/layout-1.svg" v-bind:class="{ selected: layout1selected }" /></label>
+                <input type="radio" value="2" id="layout-2" v-model="layout" class="choice">
+                <label for="layout-2"><img src="~assets/layout-2.svg" v-bind:class="{ selected: layout2selected }" /></label>
+                <input type="radio" value="3" id="layout-3" v-model="layout" class="choice">
+                <label for="layout-3"><img src="~assets/layout-3.svg" v-bind:class="{ selected: layout3selected }" /></label>
+                <input type="radio" value="4" id="layout-4" v-model="layout" class="choice">
+                <label for="layout-4"><img src="~assets/layout-4.svg" v-bind:class="{ selected: layout4selected }"/></label>
               </el-form-item>
-              <el-form-item
-                label="Image Upload">
+              <el-form-item label="Image 1 Upload">
                 <el-upload
                   action="#"
                   :show-file-list="false"
-                  :on-change="updateFeatureImage"
+                  :on-change="updateFeatureImage1"
                   :auto-upload="false"
                   accept="image/*" >
                   <img
-                    v-if="featureImageUrl"
-                    :src="featureImageUrl"
+                    v-if="featureImageUrl1"
+                    :src="featureImageUrl1"
                     class="feature-image-uploader"
                   />
                   <i v-else class="el-icon-plus feature-image-uploader"></i>
                 </el-upload>
               </el-form-item>
+              <el-form-item label="Image 3 Upload" v-show="layout4selected || layout3selected">
+                <el-upload
+                  action="#"
+                  :show-file-list="false"
+                  :on-change="updateFeatureImage3"
+                  :auto-upload="false"
+                  accept="image/*" >
+                  <img
+                    v-if="featureImageUrl3"
+                    :src="featureImageUrl3"
+                    class="feature-image-uploader"
+                  />
+                  <i v-else class="el-icon-plus feature-image-uploader"></i>
+                </el-upload>
+              </el-form-item>
+              <el-form-item label="Image 2 Upload" v-show="layout4selected || layout3selected || layout2selected">
+                <el-upload
+                  action="#"
+                  :show-file-list="false"
+                  :on-change="updateFeatureImage2"
+                  :auto-upload="false"
+                  accept="image/*" >
+                  <img
+                    v-if="featureImageUrl2"
+                    :src="featureImageUrl2"
+                    class="feature-image-uploader"
+                  />
+                  <i v-else class="el-icon-plus feature-image-uploader"></i>
+                </el-upload>
+              </el-form-item>
+              <el-form-item label="Image 4 Upload" v-show="layout4selected">
+                <el-upload
+                  action="#"
+                  :show-file-list="false"
+                  :on-change="updateFeatureImage4"
+                  :auto-upload="false"
+                  accept="image/*" >
+                  <img
+                    v-if="featureImageUrl4"
+                    :src="featureImageUrl4"
+                    class="feature-image-uploader"
+                  />
+                  <i v-else class="el-icon-plus feature-image-uploader"></i>
+                </el-upload>
+              </el-form-item>
+            </el-tab-pane>
+            <el-tab-pane label="Outline">
+              <el-form-item label="Event Title">
+                <el-input v-model="eventTitle" autosize type="text" />
+              </el-form-item>
               <el-form-item label="Event Description (Markdown)">
                 <el-input v-model="eventDescription" autosize type="textarea" />
               </el-form-item>
             </el-tab-pane>
-            <el-tab-pane label="Event Details">
+            <el-tab-pane label="Details">
               <el-form-item label="Event Times (Markdown)">
                 <el-input v-model="eventTimes" autosize type="textarea" />
               </el-form-item>
@@ -42,7 +98,7 @@
                 <el-input v-model="eventCost" autosize type="textarea" />
               </el-form-item>
             </el-tab-pane>
-            <el-tab-pane label="Contact and Location">
+            <el-tab-pane label="Contact &  Location">
               <el-form-item label="Event Contact Information (Markdown)">
                 <el-input v-model="eventContact" autosize type="textarea" />
               </el-form-item>
@@ -67,9 +123,21 @@
       </div>
       <div id="poster-preview">
         <div class="left">
-          <div class="feature-image"
-            v-bind:style="{ backgroundImage: 'url(' + featureImageUrl + ')'}">
-            <span class="upload" v-if="!featureImageUrl">⇧</span>
+          <div class="feature-image-row top" v-bind:class="{ bottom: layout1selected }">
+            <div class="feature-image" v-bind:style="{ backgroundImage: 'url(' + featureImageUrl1 + ')'}">
+              <span class="upload" v-if="!featureImageUrl1">⇧</span>
+            </div>
+            <div class="feature-image with-distance-left" v-bind:style="{ backgroundImage: 'url(' + featureImageUrl3 + ')'}" v-show="layout4selected || layout3selected">
+              <span class="upload" v-if="!featureImageUrl3">⇧</span>
+            </div>
+          </div>
+          <div class="feature-image-row bottom with-distance" v-show="!layout1selected">
+            <div class="feature-image" v-bind:style="{ backgroundImage: 'url(' + featureImageUrl2 + ')'}" v-show="layout4selected || layout3selected || layout2selected">
+              <span class="upload" v-if="!featureImageUrl1">⇧</span>
+            </div>
+            <div class="feature-image with-distance-left" v-bind:style="{ backgroundImage: 'url(' + featureImageUrl4 + ')'}" v-show="layout4selected">
+              <span class="upload" v-if="!featureImageUrl4">⇧</span>
+            </div>
           </div>
           <div class="event-description">
             <h1>{{ eventTitle }}</h1>
@@ -141,7 +209,10 @@ can to support us.`,
 ammanvms@outlook.com
 
 +44 phone number`,
-      featureImageUrl: "",
+      featureImageUrl1: "",
+      featureImageUrl2: "",
+      featureImageUrl3: "",
+      featureImageUrl4: "",
       eventDescription: `First: the purpose of the event and what happens
 
 who it is for (target audience)
@@ -155,9 +226,9 @@ Please bring:
 - and that`,
       qr: 'https://ammanvalley.foss.wales/',
 
-      imageUrl: null as unknown as string,
       isDownloading: false,
       posterBase64: '',
+      layout: "1",
     }
   },
 
@@ -188,6 +259,26 @@ Please bring:
       return md.render(this.eventDescription)
     },
 
+    layout1selected() : boolean {
+      return this.layout == "1";
+    },
+    layout2selected() : boolean {
+      return this.layout == "2";
+    },
+    layout3selected() : boolean {
+      return this.layout == "3";
+    },
+    layout4selected() : boolean {
+      return this.layout == "4";
+    },
+
+    featureImagesFilledIn() : boolean {
+      if ((!this.featureImageUrl1) && (this.layout4selected || this.layout3selected || this.layout2selected || this.layout1selected)) return false;
+      if ((!this.featureImageUrl2) && (this.layout4selected || this.layout3selected || this.layout2selected)) return false;
+      if ((!this.featureImageUrl3) && (this.layout4selected || this.layout3selected)) return false;
+      if ((!this.featureImageUrl4) && (this.layout4selected)) return false;
+      return true;
+    },
   },
 
   asyncComputed: {
@@ -202,17 +293,30 @@ Please bring:
   mounted() {},
 
   methods: {
-    updateFeatureImage(file: ElUploadInternalFileDetail) {
+    updateFeatureImage1(file: ElUploadInternalFileDetail) {
       if (!file) return
-
-      if (this.featureImageUrl !== '') URL.revokeObjectURL(this.featureImageUrl)
-
-      this.featureImageUrl = URL.createObjectURL(file.raw)
+      if (this.featureImageUrl1 !== '') URL.revokeObjectURL(this.featureImageUrl1)
+      this.featureImageUrl1 = URL.createObjectURL(file.raw)
     },
-
+    updateFeatureImage2(file: ElUploadInternalFileDetail) {
+      if (!file) return
+      if (this.featureImageUrl2 !== '') URL.revokeObjectURL(this.featureImageUrl2)
+      this.featureImageUrl2 = URL.createObjectURL(file.raw)
+    },
+    updateFeatureImage3(file: ElUploadInternalFileDetail) {
+      if (!file) return
+      if (this.featureImageUrl3 !== '') URL.revokeObjectURL(this.featureImageUrl3)
+      this.featureImageUrl3 = URL.createObjectURL(file.raw)
+    },
+    updateFeatureImage4(file: ElUploadInternalFileDetail) {
+      if (!file) return
+      if (this.featureImageUrl4 !== '') URL.revokeObjectURL(this.featureImageUrl4)
+      this.featureImageUrl4 = URL.createObjectURL(file.raw)
+    },
+    
     async downloadImage() {
 
-      if(!this.featureImageUrl){
+      if(!this.featureImagesFilledIn){
         alert('Please add an image to the poster!');
         return;
       }
@@ -237,7 +341,7 @@ Please bring:
     
     async downloadPDF() {
 
-      if(!this.featureImageUrl){
+      if(!this.featureImagesFilledIn){
         alert('Please add an image to the poster!');
         return;
       }
@@ -343,6 +447,19 @@ p {
 
     .poster-control {
       min-width: 600px;
+      
+      .layout {
+        .choice {
+          display: none;
+        }
+        img {
+          opacity: 0.4;
+        }
+        img.selected {
+          opacity: 1;
+        }
+      }
+      
       .el-upload {
         display: flex;
         justify-content: center;
@@ -382,23 +499,45 @@ p {
         align-items: stretch;
         @include debug-borders();          
         
-        .feature-image {
+        .feature-image-row.top {
+          border-top-left-radius: 1em;
+          border-top-right-radius: 1em;
+        }
+        .feature-image-row.bottom {
+          border-bottom-left-radius: 1em;
+          border-bottom-right-radius: 1em;
+        }
+        .feature-image-row.with-distance {
+          margin-top: 6mm;
+        }
+        .feature-image.with-distance-left {
+          margin-left: 6mm;
+        }
+
+        .feature-image-row {
           flex-grow: 2;
-          background: #dddddd;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-position-y: center;
-          background-position-x: center;
-          border-radius: 1em;
-          
-          // upload icon
           display: flex;
-          justify-content: center;
-          text-align: center;
-          flex-direction: column;
-          .upload {
-            text-decoration: underline;
-            font-weight: bold;
+          flex-direction: row;
+          overflow: hidden;
+          
+          .feature-image {
+            flex-grow: 1;
+            
+            background: #dddddd;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position-y: center;
+            background-position-x: center;
+            
+            // upload icon
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            flex-direction: column;
+            .upload {
+              text-decoration: underline;
+              font-weight: bold;
+            }
           }
         }
 
