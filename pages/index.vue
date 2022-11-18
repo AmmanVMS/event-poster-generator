@@ -68,7 +68,9 @@
       <div id="poster-preview">
         <div class="top">
           <div class="feature-image"
-            v-bind:style="{ backgroundImage: 'url(' + featureImageUrl + ')'}" />
+            v-bind:style="{ backgroundImage: 'url(' + featureImageUrl + ')'}">
+            <span class="upload" v-if="!featureImageUrl">⇧</span>
+          </div>
           <div class="details">
             <div class="event-location" v-html="getEventLocationMd"></div>
             <div class="event-contact" v-html="getEventContactMd"></div>
@@ -392,6 +394,16 @@ p {
           background-position-y: center;
           background-position-x: center;
           border-radius: 1em;
+          
+          // upload icon
+          display: flex;
+          justify-content: center;
+          text-align: center;
+          flex-direction: column;
+          .upload {
+            text-decoration: underline;
+            font-weight: bold;
+          }
         }
         .details {
           @include debug-borders();
