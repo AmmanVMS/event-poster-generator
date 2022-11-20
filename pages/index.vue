@@ -202,8 +202,7 @@ Glanaman,
 Station Road,  
 SA18 1LQ`,
       eventTimes: moment().add(14, 'days').format('Do MMM YY, h:00 a'),
-      eventCost: `Cost: Pay what you  
-can to support us.`,
+      eventCost: `Cost: Pay what you can to support us.`,
       eventContact: `My Name
 
 ammanvms@outlook.com
