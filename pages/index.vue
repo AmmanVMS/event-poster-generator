@@ -115,7 +115,7 @@
                 Download Image
               </el-button>
               <el-button type="primary" @click="downloadPDF()">
-                Download PDF (print)
+                Download PDF A4, A5, A6
               </el-button>
             </el-form-item>
           </el-tabs>
@@ -350,8 +350,22 @@ Please bring:
       const url = await domtoimage.toJpeg(
         document.getElementById('poster-preview')
       )
+      const alias = "image";
       const doc = new jsPDF(); // http://raw.githack.com/MrRio/jsPDF/master/docs/jsPDF.html
-      doc.addImage(url, 0, 0, 210, 297); // http://raw.githack.com/MrRio/jsPDF/master/docs/module-addImage.html#~addImage
+      // http://raw.githack.com/MrRio/jsPDF/master/docs/module-addImage.html#~addImage
+      // ----- create A4 image -----
+      doc.addImage(url, 'JPEG', 0, 0, 210, 297, alias, "FAST");
+      // ----- create A5 image -----
+      doc.addPage();
+      doc.addImage(url, 'JPEG', 210, 148.5 - 210, 148.5, 210, alias, "FAST", 90);
+      doc.addImage(url, 'JPEG', 210, 148.5 + 148.5 - 210, 148.5, 210, alias, "FAST", 90);
+      // ----- create A6 image -----
+      doc.addPage();
+      doc.addImage(url, 'JPEG', 0, 0, 105, 148.5, alias, "FAST");
+      doc.addImage(url, 'JPEG', 105, 0, 105, 148.5, alias, "FAST");
+      doc.addImage(url, 'JPEG', 0, 148.5, 105, 148.5, alias, "FAST");
+      doc.addImage(url, 'JPEG', 105, 148.5, 105, 148.5, alias, "FAST");
+
       doc.save(`${this.eventTitle}.pdf`);
       this.isDownloading = false
     },
