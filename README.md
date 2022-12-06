@@ -44,3 +44,4 @@ For detailed explanation on how things work, check out the [documentation](https
 - https://github.com/Open-Source-Bazaar/osb-poster - heading markdown, formatting, QR-Code, picture - fits! https://kaiyuanshe.cn/coscon-poster/
 - https://awesomeopensource.com/project/brentthorne/posterdown - unknown if usable. For conferences.
 - https://github.com/patrick-kidger/mkposters - worth looking at - generates posters that can be printed
+- https://stackoverflow.com/questions/74707093/vue-js-export-and-load-data-as-json
