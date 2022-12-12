@@ -194,7 +194,7 @@ inTheFuture.setDate(inTheFuture.getDate() + 14);
 
 export default Vue.extend({
   data() {
-    return {
+    var data = {
       eventTitle: "MakerSpace Event",
       eventLocation: `Amman Valley  
 MakerSpace,  
@@ -225,11 +225,25 @@ Please bring:
 - this
 - and that`,
       qr: 'https://ammanvalley.foss.wales/',
-
-      isDownloading: false,
-      posterBase64: '',
       layout: "1",
+      // attributes not to save
+      attributesToSave: "eventTitle eventLocation eventTimes eventCost eventContact eventDescription qr layout".split(" "),
+      isDownloading: false,
     }
+    const PREFILL_START = "#load=";
+    if (document.location.hash.startsWith(PREFILL_START)) {
+      const prefillString = unescape(document.location.hash.slice(PREFILL_START.length));
+      const prefillAttributes = JSON.parse(prefillString);
+      data.attributesToSave.filter(
+          // @ts-ignore: TS7053
+          name => typeof(prefillAttributes[name]) == typeof(data[name]) 
+        ).forEach(function(name: string) {
+          // @ts-ignore: TS7053
+          data[name] = prefillAttributes[name];
+      });
+      document.location.hash = "";
+    }
+    return data; 
   },
 
   computed: {
@@ -279,6 +293,17 @@ Please bring:
       if ((!this.featureImageUrl4) && (this.layout4selected)) return false;
       return true;
     },
+    
+    loadURL() : string {
+      const url = document.location + ""
+      const urlWithoutHash = url.indexOf("#") == -1 ? url : url.slice(0, url.indexOf("#"))
+      var data : any = {} // use type any although it is discouraged. https://stackoverflow.com/a/57192972/1320237
+      var me : any = this;
+      this.attributesToSave.forEach(function(name: string) {
+        data[name] = me[name];
+      })
+      return urlWithoutHash + "#load=" + JSON.stringify(data);
+    }
   },
 
   asyncComputed: {
@@ -355,17 +380,25 @@ Please bring:
       // http://raw.githack.com/MrRio/jsPDF/master/docs/module-addImage.html#~addImage
       // ----- create A4 image -----
       doc.addImage(url, 'JPEG', 0, 0, 210, 297, alias, "FAST");
+      
       // ----- create A5 image -----
       doc.addPage();
       doc.addImage(url, 'JPEG', 210, 148.5 - 210, 148.5, 210, alias, "FAST", 90);
       doc.addImage(url, 'JPEG', 210, 148.5 + 148.5 - 210, 148.5, 210, alias, "FAST", 90);
+      
       // ----- create A6 image -----
       doc.addPage();
       doc.addImage(url, 'JPEG', 0, 0, 105, 148.5, alias, "FAST");
       doc.addImage(url, 'JPEG', 105, 0, 105, 148.5, alias, "FAST");
       doc.addImage(url, 'JPEG', 0, 148.5, 105, 148.5, alias, "FAST");
       doc.addImage(url, 'JPEG', 105, 148.5, 105, 148.5, alias, "FAST");
-
+      
+      // ----- create a hyperlink to edit the poster again -----
+      // for hyper links: https://stackoverflow.com/a/43398857/1320237
+      doc.addPage();
+      doc.text('This poster was generated with the Event Poster Generator.', 25, 25);
+      doc.textWithLink('Click here to edit the poster online!', 25, 30, {url: this.loadURL});
+      
       doc.save(`${this.eventTitle}.pdf`);
       this.isDownloading = false
     },
