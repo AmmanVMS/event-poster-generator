@@ -94,7 +94,7 @@
               <el-form-item label="Event Times (Markdown)">
                 <el-input v-model="eventTimes" autosize type="textarea" />
               </el-form-item>
-              <el-form-item label="Event Costs - fixed prize, donation (Markdown)">
+              <el-form-item label="Event Costs - fixed prize in £, donation (Markdown)">
                 <el-input v-model="eventCost" autosize type="textarea" />
               </el-form-item>
             </el-tab-pane>
